@@ -20,15 +20,12 @@ ARG CONFIG_PACKAGE_NAME=mysql84-community-release-el9.rpm
 ARG REPO_NAME_SERVER=mysql-8.4-lts-community
 ARG REPO_NAME_TOOLS=mysql-tools-8.4-lts-community
 
-RUN /usr/sbin/groupadd -g 999 -r mysqlrouter >/dev/null \
-  && /usr/sbin/useradd -M -N -u 999 -g mysqlrouter -r -d /var/lib/mysqlrouter -s /bin/false \
-      -c "MySQL Router" mysqlrouter \
-  && rpm -U http://repo.mysql.oraclecorp.com/mysql-uat/repos-stage/$CONFIG_PACKAGE_NAME \
-  && microdnf install -y \
-     --enablerepo=mysql-8.4-lts-community $MYSQL_CLIENT_PACKAGE \
-  && microdnf install -y --disablerepo=\* \
-     --enablerepo=mysql-tools-8.4-lts-community $MYSQL_ROUTER_PACKAGE \
-  && microdnf clean all
+RUN /usr/sbin/groupadd -g 999 -r mysqlrouter >/dev/null 
+RUN  /usr/sbin/useradd -M -N -u 999 -g mysqlrouter -r -d /var/lib/mysqlrouter -s /bin/false -c "MySQL Router" mysqlrouter 
+RUN  rpm -U http://repo.mysql.oraclecorp.com/mysql-uat/repos-stage/$CONFIG_PACKAGE_NAME 
+RUN  microdnf install -y --enablerepo=mysql-8.4-lts-community $MYSQL_CLIENT_PACKAGE 
+RUN  microdnf install -y --disablerepo=\*   --enablerepo=mysql-tools-8.4-lts-community $MYSQL_ROUTER_PACKAGE 
+RUN  microdnf clean all
 
 COPY run.sh /run.sh
 HEALTHCHECK \
